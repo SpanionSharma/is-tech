@@ -1,0 +1,117 @@
+AI CMD ASSISTANT - USER MANUAL
+OVERVIEW
+An intelligent Windows command-line assistant that automatically troubleshoots
+failed commands using local AI (Ollama phi3) and cloud AI (Google Gemini).
+
+BASIC COMMANDS
+exit / quit Exit the assistant history Display all previously executed commands !<number> Re-run a command from history (e.g., !3 runs command #3)
+
+HOW IT WORKS
+Type any Windows CMD command
+If it fails, the assistant:
+Checks local knowledge base for similar errors
+Attempts fix with local phi3 model
+Escalates to Gemini if local fix doesn't help
+Successful fixes are saved to knowledge base for future use
+FEATURES
+[Smart Error Resolution]
+
+Automatically detects command failures
+Provides detailed error explanations
+Suggests corrected commands
+Learns from past fixes
+[Knowledge Base]
+
+Stores all successful solutions
+Uses fuzzy matching to find similar errors
+Tracks success rate of each solution
+Persists across sessions (knowledge_base.json)
+[Safety Features]
+
+Warns before executing dangerous commands
+Detects: format, del /s, rd /s, rmdir /s, deltree
+Requires explicit confirmation to proceed
+[Command History]
+
+Stores all executed commands in current session
+Quick recall with !<number> syntax
+View full history with 'history' command
+[Dual AI System]
+
+Local Model: Ollama phi3 (fast, offline)
+Cloud Model: Google Gemini (advanced, online)
+Automatic fallback if local model unavailable
+[Intelligent Escalation]
+
+Tries local solution first
+Asks for user feedback
+Escalates to Gemini if needed
+Allows user to provide additional context
+[System Context Awareness]
+
+Includes OS version in troubleshooting
+Considers current working directory
+Platform-specific solutions
+[Logging]
+
+All operations logged to cmd_ai_assistant.log
+Tracks command success/failure
+Records model used for each fix
+Timestamps all events
+EXAMPLE WORKFLOW
+cmd-ai> dir /invalid-flag
+
+Command failed.
+Error:
+Invalid switch - "invalid-flag".
+
+Attempting local fix using phi3...
+
+Suggested Fix (Local):
+The command failed because '/invalid-flag' is not a valid dir switch.
+The correct command should be: dir
+Valid switches include /w, /p, /s, /a, /b, etc.
+
+Did this fix help? (y/n): y
+
+[Solution saved to knowledge base]
+
+REQUIREMENTS
+Python 3.7+
+Ollama with phi3 model installed
+Google Gemini API key (set GOOGLE_API_KEY environment variable)
+Required packages: ollama, langchain-google-genai
+FILE STRUCTURE
+knowledge_base.json       Stores learned solutions
+cmd_ai_assistant.log      Operation logs
+ai_cmd_assistant.py       Main program
+
+TIPS
+Always review suggested fixes before executing them
+Use 'y' feedback to train the knowledge base
+Provide context when escalating for better solutions
+Check the log file for debugging
+Knowledge base improves with usage
+SAFETY NOTES
+Always verify destructive commands before confirmation
+The assistant cannot prevent all dangerous operations
+Review suggested fixes before executing
+Backup important data before running unfamiliar commands
+TROUBLESHOOTING
+[Local model not responding]
+
+Verify Ollama is running
+Check phi3 model is installed: ollama list
+Assistant will auto-fallback to Gemini
+[Gemini API errors]
+
+Verify GOOGLE_API_KEY environment variable is set
+Check API key is valid and has quota
+Check internet connection
+[Knowledge base corruption]
+
+Delete knowledge_base.json to reset
+Assistant will create new file automatically
+SUPPORT
+For issues, check the log file: cmd_ai_assistant.log
+
